@@ -1,0 +1,25 @@
+{
+  "name": "invoice-to-pdf",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [
+    "invoice",
+    "electronic invoice",
+    "xml",
+    "pdf",
+    "Italy",
+    "Italia"
+  ],
+  "author": "Federico Gandellini <fgandellini@gmail.com> (https://github.com/fgandellini)",
+  "license": "MIT",
+  "bin": {
+    "invoice-to-pdf": "cli.js"
+  },
+  "dependencies": {
+    "arg": "4.1.0",
+    "dotenv": "8.0.0",
+    "fs-extra": "7.0.1",
+    "node-watch": "0.6.2"
+  }
+}
