@@ -6,15 +6,18 @@ const { execSync } = require('child_process')
 const TEMP_DIR_PREFIX = 'invoice-to-pdf-'
 
 const XML_TO_HTML_CMD = 'xsltproc --output invoice.html style.xsl invoice.xml'
-const HTML_TO_PDF_CMD = 'wkhtmltopdf --margin-top 0 --margin-left 0 --margin-bottom 0 --margin-right 0 invoice.html invoice.pdf'
+
+// --enable-local-file-access comes from https://github.com/wkhtmltopdf/wkhtmltopdf/issues/2660
+const HTML_TO_PDF_CMD = 'wkhtmltopdf --enable-local-file-access --margin-top 0 --margin-left 0 --margin-bottom 0 --margin-right 0 invoice.html invoice.pdf'
 
 const xmlToPdf = (xmlFilePath, styleDir) => {
+  let tmpDir = null 
   try {
   // abs path of the input XML file
   const xmlFile = path.resolve(xmlFilePath)
 
   // create a temporary directory to store all the assets for processing
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), TEMP_DIR_PREFIX))
+  tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), TEMP_DIR_PREFIX))
 
   // temp file paths
   const tmpXmlFile = path.join(tmpDir, 'invoice.xml')
@@ -49,9 +52,12 @@ const xmlToPdf = (xmlFilePath, styleDir) => {
   } catch(err) {
 
     // remove the temporary directory in case of errors during conversion
-    fs.removeSync(tmpDir)
+    if (tmpDir !== null) {
+      fs.removeSync(tmpDir)
+    }
 
     console.error('Errors during conversion.')
+    console.error(err)
   }
 }
 
